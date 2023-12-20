@@ -1,4 +1,5 @@
 import * as BABYLON from '@babylonjs/core'
+import { Inspector } from '@babylonjs/inspector'
 
 const canvas = document.getElementById('renderCanvas')
 
@@ -64,3 +65,5 @@ engine.runRenderLoop(function() {
 window.addEventListener('resize', function() {
   engine.resize()
 })
+
+Inspector.Show(scene, {})

@@ -7,9 +7,14 @@ const engine = new BABYLON.Engine(canvas)
 const createScene = function() {
   const scene = new BABYLON.Scene(engine)
 
-  scene.createDefaultCameraOrLight(true, false, true)
+  scene.createDefaultLight()
 
-  const worldBox = createWorldBox()
+  const camera = createUniversalCamera(scene)
+
+
+
+  // const worldBox = createWorldBox()
+  const ground = createGround()
 
   return scene
 }
@@ -23,6 +28,29 @@ const createWorldBox = function() {
   const box = BABYLON.MeshBuilder.CreateBox(boxName, boxOptions)
 
   return box
+}
+
+const createGround = function() {
+  const groundName = 'worldGround'
+  const groundOptions = {
+    height: 10,
+    width: 10,
+    subdivisions: 30
+  }
+  const ground = new BABYLON.MeshBuilder.CreateGround(groundName, groundOptions)
+
+  ground.material =  new BABYLON.StandardMaterial()
+  ground.material.wireframe = true
+
+  return ground
+}
+
+const createUniversalCamera = function(scene) {
+  const cameraName = 'universalCamera'
+  const cameraPosition = new BABYLON.Vector3(0, 5, -10)
+  const camera = new BABYLON.UniversalCamera(cameraName, cameraPosition, scene)
+  camera.attachControl(true)
+  return camera
 }
 
 const scene = createScene()

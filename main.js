@@ -5,54 +5,27 @@ const canvas = document.getElementById('renderCanvas')
 
 const engine = new BABYLON.Engine(canvas)
 
-const createScene = function() {
-  const scene = new BABYLON.Scene(engine)
+var createScene = function () {
+  var scene = new BABYLON.Scene(engine);
+  var camera = new BABYLON.ArcRotateCamera("Camera", -Math.PI / 2,  Math.PI / 2, 5, BABYLON.Vector3.Zero(), scene);
+  camera.attachControl(canvas, true);
 
-  scene.createDefaultLight()
+var light = new BABYLON.HemisphericLight("hemiLight", new BABYLON.Vector3(-1, 1, 0), scene);
+light.diffuse = new BABYLON.Color3(1, 0, 0);
 
-  const camera = createUniversalCamera(scene)
+// Skybox
+var skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size:785}, scene);
+var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+skyboxMaterial.backFaceCulling = false;
+skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("textures/skybox", scene);
+skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+skybox.material = skyboxMaterial;			
+    
+  return scene;
 
-
-
-  // const worldBox = createWorldBox()
-  const ground = createGround()
-
-  return scene
-}
-
-const createWorldBox = function() {
-  const boxName = 'worldBox'
-  const boxOptions = {
-    size: 0.5
-  }
-
-  const box = BABYLON.MeshBuilder.CreateBox(boxName, boxOptions)
-
-  return box
-}
-
-const createGround = function() {
-  const groundName = 'worldGround'
-  const groundOptions = {
-    height: 10,
-    width: 10,
-    subdivisions: 30
-  }
-  const ground = new BABYLON.MeshBuilder.CreateGround(groundName, groundOptions)
-
-  ground.material =  new BABYLON.StandardMaterial()
-  ground.material.wireframe = true
-
-  return ground
-}
-
-const createUniversalCamera = function(scene) {
-  const cameraName = 'universalCamera'
-  const cameraPosition = new BABYLON.Vector3(0, 5, -10)
-  const camera = new BABYLON.UniversalCamera(cameraName, cameraPosition, scene)
-  camera.attachControl(true)
-  return camera
-}
+};
 
 const scene = createScene()
 

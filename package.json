@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@babylonjs/core": "^6.34.3",
-    "@babylonjs/inspector": "^6.34.3"
+    "@babylonjs/inspector": "^6.34.3",
+    "babylonjs-loaders": "^6.37.1"
   }
 }

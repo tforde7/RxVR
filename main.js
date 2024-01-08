@@ -37,7 +37,7 @@ var createScene = function () {
 
   const camera = new BABYLON.UniversalCamera("camera", new BABYLON.Vector3(0, 1, -5), scene);
   camera.attachControl(canvas, true);
-  camera.ellipsoid = new BABYLON.Vector3(1, 1, 1);
+  camera.ellipsoid = new BABYLON.Vector3(2, 2, 2);
   camera.applyGravity = true;
   camera.checkCollisions = true;
 

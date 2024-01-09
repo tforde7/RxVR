@@ -6,7 +6,7 @@ const ANTI_ALIASING = true
 const engine = new BABYLON.Engine(canvas, ANTI_ALIASING)
 
 const createSkyBox = (scene) => {
-  const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size: 1000}, scene);
+  const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size: 4000}, scene);
   const skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
   skyboxMaterial.backFaceCulling = false;
   skyboxMaterial.disableLighting = true;
@@ -17,11 +17,15 @@ const createSkyBox = (scene) => {
 
   skybox.material = skyboxMaterial;
   skybox.infiniteDistance = true;
+  skybox.checkCollisions = true;
 }
 
 const createCUH = (scene) => {
-  BABYLON.SceneLoader.ImportMesh("", "assets/models/", "cuh.glb", scene, (newMeshes) => {
-    newMeshes.forEach((mesh) => { console.log(mesh.name) })
+  BABYLON.SceneLoader.ImportMesh("", "assets/models/", "cuh-2.glb", scene, (newMeshes) => {
+    newMeshes.forEach((mesh) => { 
+      console.log(mesh.name) 
+      mesh.checkCollisions = true
+    })
     }
   )
 }
@@ -35,11 +39,19 @@ var createScene = function () {
 
   // CAMERA
 
-  const camera = new BABYLON.UniversalCamera("camera", new BABYLON.Vector3(0, 1, -5), scene);
+  const camera = new BABYLON.UniversalCamera("camera", new BABYLON.Vector3(215, 66, 463), scene);
   camera.attachControl(canvas, true);
-  camera.ellipsoid = new BABYLON.Vector3(2, 2, 2);
+  camera.ellipsoid = new BABYLON.Vector3(4, 4, 4);
   camera.applyGravity = true;
   camera.checkCollisions = true;
+  camera.setTarget(new BABYLON.Vector3(133, 64, 446));
+  camera.minZ = 0.5
+
+    // Log position every frame
+  scene.registerBeforeRender(() => {
+    console.log(camera.position); 
+  });
+
 
     // LIGHT
     // const light = new BABYLON.SpotLight("spotLight", new BABYLON.Vector3(3.29, 1.50, -12.93), new BABYLON.Vector3(0, -1, 0), 0.8, 2, scene);
@@ -53,11 +65,11 @@ var createScene = function () {
     const light3 = new BABYLON.HemisphericLight("hemiLight", new BABYLON.Vector3(0, 1, 0), scene);
 
     // GROUND
-    const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 1000, height: 1000, subdivisions: 50}, scene);
-    const groundMaterial = new BABYLON.StandardMaterial("groundMaterial");
-    groundMaterial.diffuseTexture = new BABYLON.Texture("assets/textures/ground/ground_pavement_concretecobble_04.png", scene);
-    ground.material = groundMaterial;
-    ground.checkCollisions = true;
+    // const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 1000, height: 1000, subdivisions: 50}, scene);
+    // const groundMaterial = new BABYLON.StandardMaterial("groundMaterial");
+    // groundMaterial.diffuseTexture = new BABYLON.Texture("assets/textures/ground/ground_pavement_concretecobble_04.png", scene);
+    // ground.material = groundMaterial;
+    // ground.checkCollisions = true;
   
     const skyBox = createSkyBox(scene);
     const cuh = createCUH(scene);

@@ -4,6 +4,7 @@ import { Inspector } from '@babylonjs/inspector'
 const canvas = document.getElementById('renderCanvas')
 const ANTI_ALIASING = true
 const engine = new BABYLON.Engine(canvas, ANTI_ALIASING)
+const CAMERA_START_POSITION = new BABYLON.Vector3(215, 66, 463)
 
 const createSkyBox = (scene) => {
   const skybox = BABYLON.MeshBuilder.CreateBox("skyBox", {size: 4000}, scene);
@@ -23,7 +24,30 @@ const createSkyBox = (scene) => {
 const createCUH = (scene) => {
   BABYLON.SceneLoader.ImportMesh("", "assets/models/", "cuh-2.glb", scene, (newMeshes) => {
     newMeshes.forEach((mesh) => { 
-      console.log(mesh.name) 
+      // console.log(mesh.name) 
+      mesh.checkCollisions = true
+    })
+    }
+  )
+}
+
+const createVictoria = (scene) => {
+  BABYLON.SceneLoader.ImportMesh("", "assets/models/", "victoria.glb", scene, (newMeshes) => {
+    
+    const root = newMeshes[0]
+    root.position = new BABYLON.Vector3(153, 64, 476)
+    root.scaling = new BABYLON.Vector3(8, 8, 8)
+    root.setPivotMatrix(BABYLON.Matrix.Identity());
+
+
+
+
+    root.rotation.y = Math.PI / 2
+    // root.rotation.y = Math.PI / 2
+
+    root.checkCollisions = true
+    root.applyGravity = true
+    newMeshes.forEach((mesh) => { 
       mesh.checkCollisions = true
     })
     }
@@ -39,7 +63,7 @@ var createScene = function () {
 
   // CAMERA
 
-  const camera = new BABYLON.UniversalCamera("camera", new BABYLON.Vector3(215, 66, 463), scene);
+  const camera = new BABYLON.UniversalCamera("camera", CAMERA_START_POSITION, scene);
   camera.attachControl(canvas, true);
   camera.ellipsoid = new BABYLON.Vector3(4, 4, 4);
   camera.applyGravity = true;
@@ -48,9 +72,9 @@ var createScene = function () {
   camera.minZ = 0.5
 
     // Log position every frame
-  scene.registerBeforeRender(() => {
-    console.log(camera.position); 
-  });
+  // scene.registerBeforeRender(() => {
+  //   console.log(camera.position); 
+  // });
 
 
     // LIGHT
@@ -73,6 +97,7 @@ var createScene = function () {
   
     const skyBox = createSkyBox(scene);
     const cuh = createCUH(scene);
+    const victoria = createVictoria(scene);
     
   return scene;
 

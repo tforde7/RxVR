@@ -19,16 +19,28 @@ const createSkyBox = (scene) => {
   skybox.material = skyboxMaterial;
   skybox.infiniteDistance = true;
   skybox.checkCollisions = true;
+  return skybox
 }
 
-const createCUH = (scene) => {
+const createCUH = (scene, skyBox) => {
+  console.log(skyBox)
   BABYLON.SceneLoader.ImportMesh("", "assets/models/", "cuh-2.glb", scene, (newMeshes) => {
     newMeshes.forEach((mesh) => { 
-      // console.log(mesh.name) 
+      console.log(mesh.name) 
       mesh.checkCollisions = true
+
+      const mainEntrance = newMeshes.find(mesh => mesh.name === "Main Entrance")
+      var glassMtl = new BABYLON.PBRMaterial("glassMtl", scene);
+      glassMtl.metallic = 0;
+      glassMtl.transparencyMode = BABYLON.PBRMaterial.MATERIAL_ALPHABLEND;
+      glassMtl.alpha = 0.1;
+      glassMtl.roughness = 0.01;
+      glassMtl.subSurface.isRefractionEnabled = true;
+      mainEntrance.material = glassMtl;
     })
     }
   )
+
 }
 
 const createVictoria = (scene) => {
@@ -96,7 +108,8 @@ var createScene = function () {
     // ground.checkCollisions = true;
   
     const skyBox = createSkyBox(scene);
-    const cuh = createCUH(scene);
+    console.log(skyBox)
+    const cuh = createCUH(scene, skyBox);
     const victoria = createVictoria(scene);
     
   return scene;
